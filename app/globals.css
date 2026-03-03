@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fffbf7;
+  --foreground: #1e1b2e;
+  --brand-orange: #ff6b35;
+  --brand-yellow: #ffd166;
+  --brand-teal: #06d6a0;
+  --brand-purple: #7b2d8b;
+  --brand-navy: #1e1b2e;
+  --brand-light: #fff4ec;
 }
 
 @theme inline {
@@ -12,15 +18,44 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Brand colour helpers */
+.bg-brand-orange   { background-color: var(--brand-orange); }
+.bg-brand-yellow   { background-color: var(--brand-yellow); }
+.bg-brand-teal     { background-color: var(--brand-teal); }
+.bg-brand-purple   { background-color: var(--brand-purple); }
+.bg-brand-navy     { background-color: var(--brand-navy); }
+.bg-brand-light    { background-color: var(--brand-light); }
+.text-brand-orange { color: var(--brand-orange); }
+.text-brand-yellow { color: var(--brand-yellow); }
+.text-brand-teal   { color: var(--brand-teal); }
+.text-brand-purple { color: var(--brand-purple); }
+.text-brand-navy   { color: var(--brand-navy); }
+.border-brand-orange { border-color: var(--brand-orange); }
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Card hover lift */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(255,107,53,0.15);
+}
+
+/* Hero gradient */
+.hero-gradient {
+  background: linear-gradient(135deg, #ff6b35 0%, #ffd166 50%, #ff6b35 100%);
+}
+
+/* Section stripe */
+.section-stripe {
+  background: linear-gradient(180deg, var(--brand-light) 0%, #ffffff 100%);
 }
