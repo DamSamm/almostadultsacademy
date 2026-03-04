@@ -4,6 +4,7 @@ const teamMembers = [
   {
     name: "Rohini",
     role: "Team Member",
+    emoji: "🌸",
     color: "#ff6b35",
     strengths: [
       "Active listening",
@@ -20,6 +21,7 @@ const teamMembers = [
   {
     name: "Eustacia",
     role: "Team Member",
+    emoji: "⭐",
     color: "#06d6a0",
     strengths: [
       "Supports team morale",
@@ -34,6 +36,7 @@ const teamMembers = [
   {
     name: "Renee",
     role: "Team Member",
+    emoji: "✍️",
     color: "#7b2d8b",
     strengths: [
       "Writing and formatting documents",
@@ -48,6 +51,7 @@ const teamMembers = [
   {
     name: "Kiara",
     role: "Team Member",
+    emoji: "👑",
     color: "#ffd166",
     textDark: true,
     strengths: [
@@ -317,10 +321,10 @@ export default function AboutPage() {
                   style={{ backgroundColor: member.color, color: member.textDark ? "#1e1b2e" : "#fff" }}
                 >
                   <div
-                    className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl font-bold mb-3"
+                    className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3"
                     style={{ backgroundColor: "rgba(255,255,255,0.25)" }}
                   >
-                    {member.name[0]}
+                    {member.emoji}
                   </div>
                   <h3 className="font-extrabold text-xl">{member.name}</h3>
                   <p

@@ -53,20 +53,10 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200${!isActive ? " nav-link" : ""}`}
                 style={{
                   backgroundColor: isActive ? "#ff6b35" : "transparent",
                   color: isActive ? "#ffffff" : "#d1d5db",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive)
-                    (e.currentTarget as HTMLAnchorElement).style.color =
-                      "#ff6b35";
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive)
-                    (e.currentTarget as HTMLAnchorElement).style.color =
-                      "#d1d5db";
                 }}
               >
                 {link.label}
@@ -75,16 +65,8 @@ export default function Navbar() {
           })}
           <Link
             href="/programs"
-            className="ml-4 px-5 py-2 rounded-full text-sm font-semibold text-white transition-all duration-200"
-            style={{ backgroundColor: "#06d6a0" }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-                "#05b88a")
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-                "#06d6a0")
-            }
+            className="ml-4 px-5 py-2 rounded-full text-sm font-semibold text-white transition-all duration-200 hover:opacity-85"
+            style={{ backgroundColor: "#ff6b35" }}
           >
             Enroll Now
           </Link>
@@ -140,7 +122,7 @@ export default function Navbar() {
             href="/programs"
             onClick={() => setMenuOpen(false)}
             className="mt-2 px-4 py-3 rounded-lg text-sm font-semibold text-white text-center"
-            style={{ backgroundColor: "#06d6a0" }}
+            style={{ backgroundColor: "#ff6b35" }}
           >
             Enroll Now
           </Link>

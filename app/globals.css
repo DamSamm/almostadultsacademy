@@ -59,3 +59,40 @@ html { scroll-behavior: smooth; }
 .section-stripe {
   background: linear-gradient(180deg, var(--brand-light) 0%, #ffffff 100%);
 }
+
+/* ── Ticker banner ── */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker 35s linear infinite;
+}
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Nav link underline slide-in ── */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: #ff6b35;
+  border-radius: 1px;
+  transition: left 0.25s ease, right 0.25s ease;
+}
+.nav-link:hover {
+  color: #ff6b35 !important;
+}
+.nav-link:hover::after {
+  left: 8px;
+  right: 8px;
+}

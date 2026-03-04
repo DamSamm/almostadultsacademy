@@ -4,12 +4,13 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer style={{ backgroundColor: "#1e1b2e" }} className="text-gray-300">
+      <div style={{ height: "3px", background: "linear-gradient(90deg, #ff6b35, #ffd166, #ff6b35)" }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="col-span-1 sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-3 mb-4">
             <Image
-              src="/logo.svg"
+              src="/almostadultsacademy/logo.svg"
               alt="The Almost Adults Academy logo"
               width={44}
               height={44}

@@ -54,6 +54,27 @@ const stats = [
   { value: "5–12", label: "Age Range (years)" },
 ];
 
+const testimonials = [
+  {
+    quote: "The confidence my daughter has gained is remarkable. She now talks about money, budgets and even writes her own little programs!",
+    name: "Sarah Lim",
+    relation: "Parent of 8-year-old",
+    stars: 5,
+  },
+  {
+    quote: "The curriculum is brilliantly designed. My son comes home every week excited to share what he built or experimented with.",
+    name: "Ahmad Fauzi",
+    relation: "Parent of 6-year-old",
+    stars: 5,
+  },
+  {
+    quote: "After just two terms, my daughter is more independent, creative and curious. This academy truly lives up to its name.",
+    name: "Priya Narayanan",
+    relation: "Parent of 10-year-old",
+    stars: 5,
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -117,6 +138,19 @@ export default function Home() {
               About Us
             </Link>
           </div>
+        </div>
+
+        {/* Wave divider */}
+        <div className="absolute bottom-0 left-0 right-0" style={{ lineHeight: 0 }}>
+          <svg
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none"
+            className="w-full h-16 sm:h-20"
+            fill="#1e1b2e"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" />
+          </svg>
         </div>
       </section>
 
@@ -216,25 +250,27 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {programs.map((p) => (
-              <div
-                key={p.title}
-                className="card-hover rounded-2xl p-6 shadow-sm"
-                style={{ backgroundColor: p.color + "15", border: `2px solid ${p.color}30` }}
-              >
-                <div className="text-4xl mb-3">{p.icon}</div>
-                <h3
-                  className="text-xl font-bold mb-2"
-                  style={{ color: p.textDark ? "#1e1b2e" : p.color }}
+          <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 pb-4 sm:pb-0">
+            <div className="flex gap-6 snap-x snap-mandatory sm:grid sm:grid-cols-2 lg:grid-cols-3">
+              {programs.map((p) => (
+                <div
+                  key={p.title}
+                  className="card-hover rounded-2xl p-6 shadow-sm flex-shrink-0 w-72 sm:w-auto snap-start"
+                  style={{ backgroundColor: p.color + "15", border: `2px solid ${p.color}30` }}
                 >
-                  {p.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {p.desc}
-                </p>
-              </div>
-            ))}
+                  <div className="text-4xl mb-3">{p.icon}</div>
+                  <h3
+                    className="text-xl font-bold mb-2"
+                    style={{ color: p.textDark ? "#1e1b2e" : p.color }}
+                  >
+                    {p.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {p.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="text-center mt-10">
@@ -401,6 +437,53 @@ export default function Home() {
                 <p className="text-gray-600 text-sm leading-relaxed">
                   {item.desc}
                 </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ── */}
+      <section className="py-20 section-stripe">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span
+              className="text-sm font-semibold uppercase tracking-widest"
+              style={{ color: "#ff6b35" }}
+            >
+              What Parents Say
+            </span>
+            <h2
+              className="text-4xl font-extrabold mt-2"
+              style={{ color: "#1e1b2e" }}
+            >
+              Trusted by Families Across Singapore
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-8">
+            {testimonials.map((t) => (
+              <div
+                key={t.name}
+                className="card-hover bg-white rounded-2xl p-7 shadow-sm border"
+                style={{ borderColor: "#ffe0d0" }}
+              >
+                <div
+                  className="text-6xl font-serif leading-none mb-2"
+                  style={{ color: "#ff6b35", opacity: 0.25 }}
+                >
+                  &ldquo;
+                </div>
+                <p className="text-gray-700 text-sm leading-relaxed mb-5">
+                  {t.quote}
+                </p>
+                <div className="flex gap-0.5 mb-3">
+                  {Array.from({ length: t.stars }).map((_, i) => (
+                    <span key={i} style={{ color: "#ffd166" }}>★</span>
+                  ))}
+                </div>
+                <p className="font-bold text-sm" style={{ color: "#1e1b2e" }}>{t.name}</p>
+                <p className="text-xs text-gray-500">{t.relation}</p>
               </div>
             ))}
           </div>
