@@ -1,11 +1,8 @@
 import type { NextConfig } from "next";
 
-// Only apply static export settings on GitHub Actions (production build), not locally
-const isProd = process.env.GITHUB_ACTIONS === "true";
-
 const nextConfig: NextConfig = {
-  output: isProd ? "export" : undefined, // Static export only for deployment
-  basePath: isProd ? "/almostadultsacademy" : "",
+  output: "export",
+  basePath: "/almostadultsacademy",
   images: {
     unoptimized: true,
   },
