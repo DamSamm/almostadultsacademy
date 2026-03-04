@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -7,12 +8,13 @@ export default function Footer() {
         {/* Brand */}
         <div className="col-span-1 sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-3 mb-4">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
-              style={{ backgroundColor: "#ff6b35" }}
-            >
-              AA
-            </div>
+            <Image
+              src="/logo.svg"
+              alt="The Almost Adults Academy logo"
+              width={44}
+              height={44}
+              className="flex-shrink-0"
+            />
             <p className="text-white font-bold text-base leading-tight">
               The Almost Adults Academy
             </p>

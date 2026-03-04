@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const programs = [
   {
@@ -244,6 +245,55 @@ export default function Home() {
             >
               View All Programs →
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PHOTO GALLERY ── */}
+      <section className="py-20" style={{ backgroundColor: "#1e1b2e" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span
+              className="text-sm font-semibold uppercase tracking-widest"
+              style={{ color: "#ffd166" }}
+            >
+              Life at the Academy
+            </span>
+            <h2 className="text-4xl font-extrabold mt-2 text-white">
+              See It for Yourself
+            </h2>
+            <p className="text-gray-400 mt-3 max-w-xl mx-auto">
+              A glimpse into the fun, hands-on learning that happens every day
+              at The Almost Adults Academy.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-6">
+            <div className="relative rounded-3xl overflow-hidden shadow-lg" style={{ height: "360px" }}>
+              <Image
+                src="/Tuitionpic1.jpg"
+                alt="Students learning at The Almost Adults Academy"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(30,27,46,0.6) 0%, transparent 60%)" }} />
+              <p className="absolute bottom-5 left-5 text-white font-semibold text-sm">
+                🎓 Hands-on learning in action
+              </p>
+            </div>
+            <div className="relative rounded-3xl overflow-hidden shadow-lg" style={{ height: "360px" }}>
+              <Image
+                src="/Tuitionpic2.jpg"
+                alt="Students engaged in enrichment activities"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(30,27,46,0.6) 0%, transparent 60%)" }} />
+              <p className="absolute bottom-5 left-5 text-white font-semibold text-sm">
+                ✨ Enrichment that makes a difference
+              </p>
+            </div>
           </div>
         </div>
       </section>

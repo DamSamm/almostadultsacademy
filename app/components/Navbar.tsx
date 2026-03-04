@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
@@ -24,12 +25,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 flex-shrink-0">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg"
-            style={{ backgroundColor: "#ff6b35" }}
-          >
-            AA
-          </div>
+          <Image
+            src="/logo.svg"
+            alt="The Almost Adults Academy logo"
+            width={44}
+            height={44}
+            className="flex-shrink-0"
+          />
           <div className="hidden sm:block">
             <p
               className="text-white font-bold text-sm leading-tight"

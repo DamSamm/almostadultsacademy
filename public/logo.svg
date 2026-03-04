@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Orange circle background -->
+  <circle cx="50" cy="50" r="50" fill="#ff6b35"/>
+
+  <!-- Graduation cap: flat board -->
+  <polygon points="50,18 82,31 50,44 18,31" fill="#ffffff"/>
+  <!-- Cap hat top -->
+  <rect x="34" y="27" width="32" height="17" rx="3" fill="#1e1b2e"/>
+  <!-- Stem below board -->
+  <rect x="47" y="43" width="6" height="10" fill="#ffffff"/>
+  <!-- Tassel -->
+  <line x1="82" y1="31" x2="82" y2="47" stroke="#ffd166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="82" cy="51" r="4" fill="#ffd166"/>
+
+  <!-- Child head -->
+  <circle cx="50" cy="67" r="9" fill="#ffd166"/>
+  <!-- Eyes -->
+  <circle cx="46.5" cy="65" r="1.5" fill="#1e1b2e"/>
+  <circle cx="53.5" cy="65" r="1.5" fill="#1e1b2e"/>
+  <!-- Smile -->
+  <path d="M46,69.5 Q50,74 54,69.5" stroke="#1e1b2e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Body -->
+  <rect x="44" y="77" width="12" height="13" rx="5" fill="#ffffff"/>
+</svg>
