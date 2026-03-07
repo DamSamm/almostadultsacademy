@@ -167,6 +167,9 @@ export default function EnrollPage() {
               className="bg-white rounded-3xl shadow-sm border p-8 sm:p-10 space-y-6"
               style={{ borderColor: "#ffe0d0" }}
             >
+              {/* Required by Web3Forms script so hCaptcha can identify the form */}
+              <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+
               {/* ── Section: Parent info ── */}
               <div>
                 <h2
