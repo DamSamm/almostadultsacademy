@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="col-span-1 sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-3 mb-4">
             <Image
-              src="/logo.svg"
+              src="/Academy.png"
               alt="The Almost Adults Academy logo"
               width={44}
               height={44}

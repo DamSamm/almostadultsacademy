@@ -27,7 +27,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 flex-shrink-0">
           <Image
-            src="/logo.svg"
+            src="/Academy.png"
             alt="The Almost Adults Academy logo"
             width={44}
             height={44}
