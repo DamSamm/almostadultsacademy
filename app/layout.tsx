@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import TickerBanner from "./components/TickerBanner";
 import CookieConsent from "./components/CookieConsent";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,10 +17,37 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://almostadultsacademy.vercel.app";
+
 export const metadata: Metadata = {
-  title: "The Almost Adults Academy",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "The Almost Adults Academy",
+    template: "%s | The Almost Adults Academy",
+  },
   description:
-    "Small Humans, Big Plans — An after-school enrichment centre for children aged 5–12 in Singapore.",
+    "Small Humans, Big Plans — An after-school enrichment centre for children aged 5–12 in Singapore offering Coding, Life Skills, Creative Arts, STEM, Performing Arts and Outdoor Classes.",
+  openGraph: {
+    type: "website",
+    siteName: "The Almost Adults Academy",
+    title: "The Almost Adults Academy",
+    description:
+      "Small Humans, Big Plans — An after-school enrichment centre for children aged 5–12 in Singapore.",
+    url: BASE_URL,
+    images: [
+      {
+        url: "/Academy.png",
+        width: 1200,
+        height: 630,
+        alt: "The Almost Adults Academy",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -37,6 +65,7 @@ export default function RootLayout({
         <main className="min-h-screen">{children}</main>
         <Footer />
         <CookieConsent />
+        <GoogleAnalytics />
 
         {/* WhatsApp floating button — replace the number below with your real WhatsApp number */}
         <a
