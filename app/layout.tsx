@@ -31,10 +31,18 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "The Almost Adults Academy",
-    title: "The Almost Adults Academy",
+    title: "The Almost Adults Academy | After-School Enrichment for Kids",
     description:
-      "Small Humans, Big Plans — An after-school enrichment centre for children aged 5–12 in Singapore.",
+      "Small Humans, Big Plans — enrichment classes for children aged 5–12 in Singapore. Coding, Life Skills, Creative Arts, STEM, Performing Arts & Outdoor Classes. Enroll today!",
     url: BASE_URL,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "The Almost Adults Academy — After-School Enrichment for Kids in Singapore",
+      },
+    ],
   },
   robots: {
     index: true,
