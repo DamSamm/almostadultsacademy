@@ -35,14 +35,6 @@ export const metadata: Metadata = {
     description:
       "Small Humans, Big Plans — An after-school enrichment centre for children aged 5–12 in Singapore.",
     url: BASE_URL,
-    images: [
-      {
-        url: "/Academy.png",
-        width: 1200,
-        height: 630,
-        alt: "The Almost Adults Academy",
-      },
-    ],
   },
   robots: {
     index: true,
