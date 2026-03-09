@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const programs = [
   {
+    slug: "coding",
     icon: "💻",
     title: "Coding",
     tagline: "Build. Create. Think.",
@@ -19,6 +20,7 @@ const programs = [
     ],
   },
   {
+    slug: "essential-life-skills",
     icon: "🧵",
     title: "Essential Life Skills",
     tagline: "Real Skills for Real Life.",
@@ -36,6 +38,7 @@ const programs = [
     ],
   },
   {
+    slug: "creative-arts",
     icon: "🎨",
     title: "Creative Arts",
     tagline: "Imagine. Express. Create.",
@@ -53,6 +56,7 @@ const programs = [
     ],
   },
   {
+    slug: "stem",
     icon: "🔬",
     title: "STEM",
     tagline: "Discover. Experiment. Innovate.",
@@ -71,6 +75,7 @@ const programs = [
     ],
   },
   {
+    slug: "performing-arts",
     icon: "🎭",
     title: "Performing Arts",
     tagline: "Speak. Sing. Shine.",
@@ -88,6 +93,7 @@ const programs = [
     ],
   },
   {
+    slug: "outdoor-classes",
     icon: "🌿",
     title: "Outdoor Classes",
     tagline: "Explore. Collaborate. Grow.",
@@ -244,6 +250,16 @@ export default function ProgramsPage() {
                     ))}
                   </ul>
                 </div>
+              </div>
+              {/* View Details link */}
+              <div className="px-8 pb-6 flex items-center sm:col-span-2">
+                <Link
+                  href={`/programs/${p.slug}`}
+                  className="inline-block px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-transform hover:scale-105"
+                  style={{ backgroundColor: p.color === "#ffd166" ? "#cc8800" : p.color }}
+                >
+                  View Full Programme →
+                </Link>
               </div>
             </div>
           ))}

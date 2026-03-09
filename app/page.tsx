@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import FadeIn from "./components/FadeIn";
 
 const programs = [
   {
@@ -157,8 +158,8 @@ export default function Home() {
       {/* ── STATS BAR ── */}
       <section style={{ backgroundColor: "#1e1b2e" }} className="py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
+          {stats.map((s, i) => (
+            <FadeIn key={s.label} delay={i * 0.1} className="text-center">
               <p
                 className="text-4xl font-extrabold"
                 style={{ color: "#ff6b35" }}
@@ -166,7 +167,7 @@ export default function Home() {
                 {s.value}
               </p>
               <p className="text-sm text-gray-400 mt-1">{s.label}</p>
-            </div>
+            </FadeIn>
           ))}
         </div>
       </section>
@@ -174,7 +175,7 @@ export default function Home() {
       {/* ── ABOUT SNIPPET ── */}
       <section className="section-stripe py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
+          <FadeIn direction="left">
             <span
               className="text-sm font-semibold uppercase tracking-widest"
               style={{ color: "#ff6b35" }}
@@ -205,7 +206,8 @@ export default function Home() {
             >
               Learn More About Us →
             </Link>
-          </div>
+          </FadeIn>
+          <FadeIn direction="right" delay={0.15}>
           <div className="grid grid-cols-2 gap-4">
             {[
               { icon: "🎯", text: "Essential life skills not taught in school" },
@@ -225,12 +227,14 @@ export default function Home() {
               </div>
             ))}
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* ── PROGRAMS PREVIEW ── */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
           <div className="text-center mb-12">
             <span
               className="text-sm font-semibold uppercase tracking-widest"
@@ -282,12 +286,14 @@ export default function Home() {
               View All Programs →
             </Link>
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* ── PHOTO GALLERY ── */}
       <section className="py-20" style={{ backgroundColor: "#1e1b2e" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
           <div className="text-center mb-12">
             <span
               className="text-sm font-semibold uppercase tracking-widest"
@@ -331,12 +337,14 @@ export default function Home() {
               </p>
             </div>
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* ── AWARDS ── */}
       <section className="py-20" style={{ backgroundColor: "#1e1b2e" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
           <div className="text-center mb-12">
             <span
               className="text-sm font-semibold uppercase tracking-widest"
@@ -374,12 +382,14 @@ export default function Home() {
               </div>
             ))}
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* ── UPCOMING INITIATIVES ── */}
       <section className="section-stripe py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
           <div className="text-center mb-12">
             <span
               className="text-sm font-semibold uppercase tracking-widest"
@@ -440,12 +450,14 @@ export default function Home() {
               </div>
             ))}
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* ── TESTIMONIALS ── */}
       <section className="py-20 section-stripe">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
           <div className="text-center mb-12">
             <span
               className="text-sm font-semibold uppercase tracking-widest"
@@ -487,6 +499,7 @@ export default function Home() {
               </div>
             ))}
           </div>
+          </FadeIn>
         </div>
       </section>
 

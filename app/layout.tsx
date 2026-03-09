@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import TickerBanner from "./components/TickerBanner";
+import CookieConsent from "./components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,10 +36,11 @@ export default function RootLayout({
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <CookieConsent />
 
         {/* WhatsApp floating button — replace the number below with your real WhatsApp number */}
         <a
-          href="https://wa.me/6588578387"
+          href="https://wa.me/6588578387?text=Hi%20The%20Almost%20Adults%20Academy!%20I%20would%20like%20to%20find%20out%20more%20about%20your%20programmes.%20%F0%9F%8C%9F"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat with us on WhatsApp"
