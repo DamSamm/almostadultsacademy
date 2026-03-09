@@ -306,7 +306,7 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="relative rounded-3xl overflow-hidden shadow-lg" style={{ height: "360px" }}>
               <Image
-                src="/almostadultsacademy/Tuitionpic1.jpg"
+                src="/Tuitionpic1.jpg"
                 alt="Students learning at The Almost Adults Academy"
                 fill
                 className="object-cover"
@@ -319,7 +319,7 @@ export default function Home() {
             </div>
             <div className="relative rounded-3xl overflow-hidden shadow-lg" style={{ height: "360px" }}>
               <Image
-                src="/almostadultsacademy/Tuitionpic2.jpg"
+                src="/Tuitionpic2.jpg"
                 alt="Students engaged in enrichment activities"
                 fill
                 className="object-cover"
