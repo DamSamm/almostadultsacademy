@@ -51,7 +51,7 @@ const schedule = [
     course: "Outdoor Classes",
     icon: "🌿",
     color: "#2d6a4f",
-    slots: ["3:00 pm – 4:00 pm"],
+    slots: ["3:00 pm – 4:00 pm", "5:00 pm – 6:00 pm"],
   },
 ];
 
@@ -102,7 +102,7 @@ export default function TimetablePage() {
               className="px-4 py-2 rounded-full text-sm font-semibold text-white"
               style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
             >
-              📅 Saturday: Morning session only
+              📅 Saturday: Morning & afternoon sessions
             </span>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default function TimetablePage() {
                 </table>
               </div>
               <p className="text-center text-xs text-gray-400 mt-4">
-                * Saturday Outdoor Classes run 3:00 pm – 4:00 pm only.
+                * Saturday Outdoor Classes run both the 3:00 pm and 5:00 pm sessions.
               </p>
             </>
           )}
@@ -282,7 +282,7 @@ export default function TimetablePage() {
                 </div>
               ))}
               <p className="text-center text-xs text-gray-400 pt-2">
-                * Saturday Outdoor Classes run 3:00 pm – 4:00 pm only.
+                * Saturday Outdoor Classes run both the 3:00 pm and 5:00 pm sessions.
               </p>
             </>
           )}

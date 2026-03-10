@@ -69,9 +69,9 @@ const testimonials = [
     stars: 5,
   },
   {
-    quote: "After just two terms, my daughter is more independent, creative and curious. This academy truly lives up to its name.",
-    name: "Priya Narayanan",
-    relation: "Parent of 10-year-old",
+    quote: "I love coming to class every week! We get to do so many cool things — I built my own game and even learned how to sew a pouch!",
+    name: "Chloe Tan",
+    relation: "Student, Age 9",
     stars: 5,
   },
 ];
