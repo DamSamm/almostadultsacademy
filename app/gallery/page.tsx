@@ -18,12 +18,12 @@ const photos = [
 ];
 
 const placeholders = [
-  { icon: "💻", label: "Coding Class", category: "Coding", color: "#7b2d8b" },
-  { icon: "🧵", label: "Life Skills Workshop", category: "Life Skills", color: "#ff6b35" },
-  { icon: "🎨", label: "Creative Arts Session", category: "Creative Arts", color: "#06d6a0" },
-  { icon: "🔬", label: "STEM Experiments", category: "STEM", color: "#ffd166", textDark: true },
-  { icon: "🎭", label: "Performing Arts", category: "Performing Arts", color: "#e63946" },
-  { icon: "🌿", label: "Outdoor Adventure", category: "Outdoor Classes", color: "#2d6a4f" },
+  { icon: "💻", label: "Coding Class", slug: "coding", category: "Coding", color: "#7b2d8b" },
+  { icon: "🧵", label: "Life Skills Workshop", slug: "essential-life-skills", category: "Life Skills", color: "#ff6b35" },
+  { icon: "🎨", label: "Creative Arts Session", slug: "creative-arts", category: "Creative Arts", color: "#06d6a0" },
+  { icon: "🔬", label: "STEM Experiments", slug: "stem", category: "STEM", color: "#ffd166", textDark: true },
+  { icon: "🎭", label: "Performing Arts", slug: "performing-arts", category: "Performing Arts", color: "#e63946" },
+  { icon: "🌿", label: "Outdoor Adventure", slug: "outdoor-classes", category: "Outdoor Classes", color: "#2d6a4f" },
 ];
 
 export default function GalleryPage() {
@@ -118,7 +118,7 @@ export default function GalleryPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
             {placeholders.map((p, i) => (
               <FadeIn key={p.label} delay={i * 0.07}>
-                <Link href={`/programs/${p.label.toLowerCase().replace(/ /g, "-")}`}>
+                <Link href={`/programs/${p.slug}`}>
                   <div
                     className="rounded-2xl overflow-hidden shadow-sm border group cursor-pointer"
                     style={{ borderColor: "#e5e7eb" }}
