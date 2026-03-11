@@ -18,12 +18,12 @@ const photos = [
 ];
 
 const placeholders = [
-  { icon: "💻", label: "Coding Class", slug: "coding", category: "Coding", color: "#7b2d8b" },
-  { icon: "🧵", label: "Life Skills Workshop", slug: "essential-life-skills", category: "Life Skills", color: "#ff6b35" },
-  { icon: "🎨", label: "Creative Arts Session", slug: "creative-arts", category: "Creative Arts", color: "#06d6a0" },
-  { icon: "🔬", label: "STEM Experiments", slug: "stem", category: "STEM", color: "#ffd166", textDark: true },
-  { icon: "🎭", label: "Performing Arts", slug: "performing-arts", category: "Performing Arts", color: "#e63946" },
-  { icon: "🌿", label: "Outdoor Adventure", slug: "outdoor-classes", category: "Outdoor Classes", color: "#2d6a4f" },
+  { icon: "💻", label: "Coding Class", slug: "coding", image: "/CodingClass.png", category: "Coding", color: "#7b2d8b" },
+  { icon: "🧵", label: "Life Skills Workshop", slug: "essential-life-skills", image: "/LifeSkills.jpeg", category: "Life Skills", color: "#ff6b35" },
+  { icon: "🎨", label: "Creative Arts Session", slug: "creative-arts", image: "/CreativeArts.jpg", category: "Creative Arts", color: "#06d6a0" },
+  { icon: "🔬", label: "STEM Experiments", slug: "stem", image: "/STEM.jpeg", category: "STEM", color: "#ffd166", textDark: true },
+  { icon: "🎭", label: "Performing Arts", slug: "performing-arts", image: "/PerformingArts.jpg", category: "Performing Arts", color: "#e63946" },
+  { icon: "🌿", label: "Outdoor Adventure", slug: "outdoor-classes", image: "/OutdoorClasses.jpg", category: "Outdoor Classes", color: "#2d6a4f" },
 ];
 
 export default function GalleryPage() {
@@ -123,11 +123,19 @@ export default function GalleryPage() {
                     className="rounded-2xl overflow-hidden shadow-sm border group cursor-pointer"
                     style={{ borderColor: "#e5e7eb" }}
                   >
-                    <div
-                      className="flex items-center justify-center py-12 text-6xl transition-transform group-hover:scale-110"
-                      style={{ backgroundColor: p.color + "20" }}
-                    >
-                      {p.icon}
+                    <div className="relative overflow-hidden" style={{ height: "180px" }}>
+                      <Image
+                        src={p.image}
+                        alt={p.label}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        sizes="(max-width: 640px) 50vw, 33vw"
+                      />
+                      <div
+                        className="absolute inset-0"
+                        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%)" }}
+                      />
+                      <span className="absolute top-3 left-3 text-2xl drop-shadow">{p.icon}</span>
                     </div>
                     <div className="p-4 bg-white">
                       <p className="font-bold text-sm" style={{ color: "#1e1b2e" }}>

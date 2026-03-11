@@ -109,12 +109,15 @@ export default function AboutPage() {
     <>
       {/* ── PAGE HERO ── */}
       <section
-        className="py-24 text-center"
+        className="py-24 text-center relative"
         style={{
-          background: "linear-gradient(135deg, #1e1b2e 0%, #3a2d5c 100%)",
+          backgroundImage: "url('/WhoWeAre.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(30,27,46,0.72)" }} />
+        <div className="relative max-w-4xl mx-auto px-4">
           <span
             className="text-sm font-semibold uppercase tracking-widest"
             style={{ color: "#ffd166" }}
@@ -194,8 +197,17 @@ export default function AboutPage() {
       </section>
 
       {/* ── PURPOSE ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        className="py-20 relative"
+        style={{
+          backgroundImage: "url('/OurMissionOurPurpose.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* dark overlay for legibility */}
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(30,27,46,0.65)" }} />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span
               className="text-sm font-semibold uppercase tracking-widest"
@@ -204,8 +216,7 @@ export default function AboutPage() {
               Our Mission
             </span>
             <h2
-              className="text-4xl font-extrabold mt-2"
-              style={{ color: "#1e1b2e" }}
+              className="text-4xl font-extrabold mt-2 text-white"
             >
               Our Purpose
             </h2>
@@ -233,10 +244,10 @@ export default function AboutPage() {
               <div
                 key={item.text}
                 className="card-hover rounded-2xl p-6 text-center shadow-sm border"
-                style={{ borderColor: "#ffe0d0" }}
+                style={{ borderColor: "rgba(255,255,255,0.2)", backgroundColor: "rgba(255,255,255,0.1)", backdropFilter: "blur(6px)" }}
               >
                 <div className="text-4xl mb-4">{item.icon}</div>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.text}</p>
+                <p className="text-white text-sm leading-relaxed opacity-90">{item.text}</p>
               </div>
             ))}
           </div>

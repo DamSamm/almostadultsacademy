@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FadeIn from "../../components/FadeIn";
@@ -12,6 +13,7 @@ const programs = [
     age: "Ages 5–12",
     day: "Monday",
     hero: "linear-gradient(135deg, #7b2d8b 0%, #4a1a6b 100%)",
+    image: "/CodingClass.png",
     intro:
       "In a world driven by technology, coding is one of the most valuable skills a child can learn. Our Coding programme introduces children to the fundamentals of programming through interactive, game-based activities — making complex concepts approachable and exciting.",
     activities: [
@@ -43,6 +45,7 @@ const programs = [
     age: "Ages 7–12",
     day: "Tuesday",
     hero: "linear-gradient(135deg, #ff6b35 0%, #cc4a1a 100%)",
+    image: "/LifeSkills.jpeg",
     intro:
       "School curriculum rarely teaches children how to sew a button, manage a budget, or handle everyday household tasks. Our Essential Life Skills programme bridges that gap, preparing children with practical knowledge they will use for the rest of their lives.",
     activities: [
@@ -74,6 +77,7 @@ const programs = [
     age: "Ages 5–12",
     day: "Wednesday",
     hero: "linear-gradient(135deg, #06d6a0 0%, #04a07a 100%)",
+    image: "/CreativeArts.jpg",
     intro:
       "Art is more than drawing — it is a language. Our Creative Arts programme encourages children to express themselves through a wide range of media, developing their imagination and fine motor skills in a supportive, open environment.",
     activities: [
@@ -106,6 +110,7 @@ const programs = [
     age: "Ages 6–12",
     day: "Thursday",
     hero: "linear-gradient(135deg, #ffd166 0%, #cc9a00 100%)",
+    image: "/STEM.jpeg",
     intro:
       "Science, Technology, Engineering, and Maths come to life in our STEM programme. Through exciting experiments and collaborative challenges, children develop a love for discovery and learn to think like scientists and engineers.",
     activities: [
@@ -142,6 +147,7 @@ const programs = [
     age: "Ages 5–12",
     day: "Friday",
     hero: "linear-gradient(135deg, #e63946 0%, #a01a24 100%)",
+    image: "/PerformingArts.jpg",
     intro:
       "Performing Arts goes far beyond the stage — it builds the confidence to speak up, the empathy to understand others, and the creativity to tell stories. Our programme uses drama, music, and movement to unlock every child's inner performer.",
     activities: [
@@ -173,6 +179,7 @@ const programs = [
     age: "Ages 7–12",
     day: "Saturday",
     hero: "linear-gradient(135deg, #2d6a4f 0%, #1a3d2e 100%)",
+    image: "/OutdoorClasses.jpg",
     intro:
       "Children learn best when they step outside. Our Outdoor Classes take learning into nature, building resilience, teamwork, and environmental awareness through physical challenges and real-world exploration.",
     activities: [
@@ -283,6 +290,25 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
           </FadeIn>
         </div>
       </section>
+
+      {/* ── PROGRAMME IMAGE ── */}
+      {program.image && (
+        <section className="bg-white pb-4">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
+            <FadeIn>
+              <div className="relative rounded-3xl overflow-hidden shadow-lg" style={{ height: "360px" }}>
+                <Image
+                  src={program.image}
+                  alt={`${program.title} class in action`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 768px"
+                />
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+      )}
 
       {/* ── ACTIVITIES & OUTCOMES ── */}
       <section className="py-20 section-stripe">
