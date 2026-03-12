@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -74,6 +75,37 @@ export default function Navbar() {
           >
             Enroll Now
           </Link>
+
+          {/* Auth buttons */}
+          <div className="ml-3 flex items-center gap-2">
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <button
+                  className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:opacity-85"
+                  style={{ color: "#d1d5db", border: "1px solid rgba(255,255,255,0.2)" }}
+                >
+                  Sign In
+                </button>
+              </SignInButton>
+              <Link
+                href="/sign-up"
+                className="px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-200 hover:opacity-85"
+                style={{ backgroundColor: "#ffd166", color: "#1e1b2e" }}
+              >
+                Sign Up
+              </Link>
+            </Show>
+            <Show when="signed-in">
+              <Link
+                href="/dashboard"
+                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:opacity-85"
+                style={{ color: "#ffd166", border: "1px solid rgba(255,209,102,0.3)" }}
+              >
+                Dashboard
+              </Link>
+              <UserButton />
+            </Show>
+          </div>
         </nav>
 
         {/* Mobile Hamburger */}
@@ -130,6 +162,39 @@ export default function Navbar() {
           >
             Enroll Now
           </Link>
+
+          {/* Auth — mobile */}
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button
+                className="mt-1 px-4 py-3 rounded-lg text-sm font-medium text-left"
+                style={{ color: "#d1d5db", backgroundColor: "rgba(255,255,255,0.05)" }}
+              >
+                Sign In
+              </button>
+            </SignInButton>
+            <Link
+              href="/sign-up"
+              onClick={() => setMenuOpen(false)}
+              className="mt-1 px-4 py-3 rounded-lg text-sm font-semibold text-center"
+              style={{ backgroundColor: "#ffd166", color: "#1e1b2e" }}
+            >
+              Sign Up
+            </Link>
+          </Show>
+          <Show when="signed-in">
+            <Link
+              href="/dashboard"
+              onClick={() => setMenuOpen(false)}
+              className="mt-1 px-4 py-3 rounded-lg text-sm font-medium"
+              style={{ color: "#ffd166", backgroundColor: "rgba(255,209,102,0.1)" }}
+            >
+              Dashboard
+            </Link>
+            <div className="px-4 py-3">
+              <UserButton />
+            </div>
+          </Show>
         </nav>
       )}
     </header>
