@@ -64,7 +64,8 @@ export async function POST(req: NextRequest) {
       await supabaseAdmin
         .from("enrollments")
         .update({ status: "cancelled" })
-        .eq("id", enrollmentId);
+        .eq("id", enrollmentId)
+        .eq("status", "pending"); // never cancel an already-confirmed enrollment
       break;
     }
 
