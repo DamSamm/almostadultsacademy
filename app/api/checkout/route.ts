@@ -48,7 +48,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to save child" }, { status: 500 });
   }
 
-  // Reuse an existing pending enrollment for this child+course to avoid duplicates
+  // Block if a confirmed enrollment already exists for this child+course
+  const { data: confirmedEnrollment } = await supabaseAdmin
+    .from("enrollments")
+    .select("id")
+    .eq("child_id", child.id)
+    .eq("parent_id", profile.id)
+    .eq("course", course)
+    .eq("status", "confirmed")
+    .maybeSingle();
+
+  if (confirmedEnrollment) {
+    return NextResponse.json(
+      { error: "Your child is already enrolled in this course." },
+      { status: 409 }
+    );
+  }
+
+  // Reuse an existing pending enrollment to avoid duplicates
   const { data: existingEnrollment } = await supabaseAdmin
     .from("enrollments")
     .select("id")
@@ -56,7 +73,7 @@ export async function POST(req: NextRequest) {
     .eq("parent_id", profile.id)
     .eq("course", course)
     .eq("status", "pending")
-    .single();
+    .maybeSingle();
 
   let enrollmentId: string;
   if (existingEnrollment) {

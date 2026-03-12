@@ -15,10 +15,20 @@ export default async function PaymentsPage() {
   const { data: payments } = profile
     ? await supabaseAdmin
         .from("payments")
-        .select("id, amount_sgd, status, billing_type, paid_at, created_at, enrollments(course)")
+        .select("id, amount_sgd, status, billing_type, paid_at, created_at, enrollment_id")
         .eq("parent_id", profile.id)
         .order("created_at", { ascending: false })
     : { data: [] };
+
+  // Fetch course names for each payment's enrollment
+  const enrollmentIds = [...new Set((payments ?? []).map((p) => p.enrollment_id).filter(Boolean))];
+  const { data: enrollments } = enrollmentIds.length
+    ? await supabaseAdmin
+        .from("enrollments")
+        .select("id, course")
+        .in("id", enrollmentIds)
+    : { data: [] };
+  const courseMap = Object.fromEntries((enrollments ?? []).map((e) => [e.id, e.course]));
 
   const totalPaid =
     payments
@@ -55,12 +65,12 @@ export default async function PaymentsPage() {
             </thead>
             <tbody>
               {payments.map((p) => {
-                const enrollment = (p.enrollments as unknown as { course: string }[] | null)?.[0] ?? null;
+                const course = p.enrollment_id ? (courseMap[p.enrollment_id] ?? "—") : "—";
                 const date = p.paid_at ?? p.created_at;
                 return (
                   <tr key={p.id} className="border-b last:border-0" style={{ borderColor: "#f3f4f6" }}>
                     <td className="px-5 py-3.5 font-medium" style={{ color: "#1e1b2e" }}>
-                      {enrollment?.course ?? "—"}
+                      {course}
                     </td>
                     <td className="px-5 py-3.5 text-gray-500">
                       {p.billing_type === "recurring" ? "Monthly" : "One-time"}
