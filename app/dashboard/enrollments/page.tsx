@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import supabaseAdmin from "@/lib/supabase-admin";
+import RetryPaymentButton from "./RetryPaymentButton";
 
 export default async function EnrollmentsPage() {
   const { userId } = await auth();
@@ -71,6 +72,11 @@ export default async function EnrollmentsPage() {
                   </div>
                   <StatusBadge status={e.status} />
                 </div>
+                {e.status === "pending" && (
+                  <div className="mt-3 flex justify-end">
+                    <RetryPaymentButton enrollmentId={e.id} />
+                  </div>
+                )}
               </div>
             );
           })}

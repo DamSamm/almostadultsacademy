@@ -48,22 +48,37 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to save child" }, { status: 500 });
   }
 
-  // Create pending enrollment
-  const { data: enrollment, error: enrollmentError } = await supabaseAdmin
+  // Reuse an existing pending enrollment for this child+course to avoid duplicates
+  const { data: existingEnrollment } = await supabaseAdmin
     .from("enrollments")
-    .insert({
-      child_id: child.id,
-      parent_id: profile.id,
-      course,
-      preferred_time: preferredTime || null,
-      billing_type: billingType,
-      status: "pending",
-    })
     .select("id")
+    .eq("child_id", child.id)
+    .eq("parent_id", profile.id)
+    .eq("course", course)
+    .eq("status", "pending")
     .single();
 
-  if (enrollmentError || !enrollment) {
-    return NextResponse.json({ error: "Failed to create enrollment" }, { status: 500 });
+  let enrollmentId: string;
+  if (existingEnrollment) {
+    enrollmentId = existingEnrollment.id;
+  } else {
+    const { data: enrollment, error: enrollmentError } = await supabaseAdmin
+      .from("enrollments")
+      .insert({
+        child_id: child.id,
+        parent_id: profile.id,
+        course,
+        preferred_time: preferredTime || null,
+        billing_type: billingType,
+        status: "pending",
+      })
+      .select("id")
+      .single();
+
+    if (enrollmentError || !enrollment) {
+      return NextResponse.json({ error: "Failed to create enrollment" }, { status: 500 });
+    }
+    enrollmentId = enrollment.id;
   }
 
   // Build Stripe Checkout session
@@ -86,7 +101,7 @@ export async function POST(req: NextRequest) {
         },
       ],
       metadata: {
-        enrollment_id: enrollment.id,
+        enrollment_id: enrollmentId,
         parent_id: profile.id,
         billing_type: "one_time",
       },
@@ -109,7 +124,7 @@ export async function POST(req: NextRequest) {
         },
       ],
       metadata: {
-        enrollment_id: enrollment.id,
+        enrollment_id: enrollmentId,
         parent_id: profile.id,
         billing_type: "recurring",
       },
