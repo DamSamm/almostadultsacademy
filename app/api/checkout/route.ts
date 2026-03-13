@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import stripe from "@/lib/stripe";
 import supabaseAdmin from "@/lib/supabase-admin";
+import { checkoutRatelimit } from "@/lib/ratelimit";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://almostadultsacademy.vercel.app";
 const PRICE_PER_SESSION_CENTS = 3500; // SGD $35.00
@@ -10,6 +11,15 @@ export async function POST(req: NextRequest) {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  }
+
+  const { success, reset } = await checkoutRatelimit.limit(userId);
+  if (!success) {
+    const retryAfter = Math.ceil((reset - Date.now()) / 1000);
+    return NextResponse.json(
+      { error: "Too many requests. Please try again shortly." },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } }
+    );
   }
 
   const body = await req.json();

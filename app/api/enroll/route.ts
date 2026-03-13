@@ -1,7 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import nodemailer from "nodemailer";
 
+/** Escapes HTML special characters to prevent injection in email bodies. */
+function escapeHtml(value: unknown): string {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
+}
+
+/** Basic email format validation to block header-injection via replyTo. */
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 export async function POST(req: NextRequest) {
+  // Require authentication — the enroll form only shows to signed-in users anyway,
+  // and leaving this open allows anyone to spam two emails per request.
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const {
@@ -23,6 +46,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validate email format before using it in replyTo / sendMail to address.
+    if (!isValidEmail(String(parentEmail))) {
+      return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
+    }
+
+    // Escape all user-supplied values before interpolating into HTML.
+    const safeName = escapeHtml(parentName);
+    const safeEmail = escapeHtml(parentEmail);
+    const safePhone = escapeHtml(parentPhone) || "—";
+    const safeChildName = escapeHtml(childName);
+    const safeChildAge = escapeHtml(childAge);
+    const safeCourse = escapeHtml(courseInterested);
+    const safeTime = escapeHtml(preferredTime) || "No preference";
+    const safeMessage = escapeHtml(message) || "—";
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -41,35 +79,35 @@ export async function POST(req: NextRequest) {
           <table style="width: 100%; border-collapse: collapse; font-size: 14px; color: #374151;">
             <tr style="border-bottom: 1px solid #f3f4f6;">
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e; width: 40%;">Parent / Guardian Name</td>
-              <td style="padding: 10px 0;">${parentName}</td>
+              <td style="padding: 10px 0;">${safeName}</td>
             </tr>
             <tr style="border-bottom: 1px solid #f3f4f6;">
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e;">Parent Email</td>
-              <td style="padding: 10px 0;"><a href="mailto:${parentEmail}" style="color: #ff6b35;">${parentEmail}</a></td>
+              <td style="padding: 10px 0;"><a href="mailto:${safeEmail}" style="color: #ff6b35;">${safeEmail}</a></td>
             </tr>
             <tr style="border-bottom: 1px solid #f3f4f6;">
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e;">Parent Phone</td>
-              <td style="padding: 10px 0;">${parentPhone || "—"}</td>
+              <td style="padding: 10px 0;">${safePhone}</td>
             </tr>
             <tr style="border-bottom: 1px solid #f3f4f6;">
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e;">Child's Name</td>
-              <td style="padding: 10px 0;">${childName}</td>
+              <td style="padding: 10px 0;">${safeChildName}</td>
             </tr>
             <tr style="border-bottom: 1px solid #f3f4f6;">
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e;">Child's Age</td>
-              <td style="padding: 10px 0;">${childAge}</td>
+              <td style="padding: 10px 0;">${safeChildAge}</td>
             </tr>
             <tr style="border-bottom: 1px solid #f3f4f6;">
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e;">Course Interested In</td>
-              <td style="padding: 10px 0; color: #ff6b35; font-weight: 600;">${courseInterested}</td>
+              <td style="padding: 10px 0; color: #ff6b35; font-weight: 600;">${safeCourse}</td>
             </tr>
             <tr style="border-bottom: 1px solid #f3f4f6;">
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e;">Preferred Time Slot</td>
-              <td style="padding: 10px 0;">${preferredTime || "No preference"}</td>
+              <td style="padding: 10px 0;">${safeTime}</td>
             </tr>
             <tr>
               <td style="padding: 10px 0; font-weight: bold; color: #1e1b2e; vertical-align: top;">Additional Message</td>
-              <td style="padding: 10px 0;">${message || "—"}</td>
+              <td style="padding: 10px 0;">${safeMessage}</td>
             </tr>
           </table>
         </div>
@@ -82,25 +120,25 @@ export async function POST(req: NextRequest) {
     await transporter.sendMail({
       from: `"Almost Adults Academy" <${process.env.GMAIL_USER}>`,
       to: process.env.GMAIL_USER,
-      replyTo: parentEmail,
-      subject: `📋 New Enrollment Enquiry — ${childName} (${courseInterested})`,
+      replyTo: String(parentEmail), // already validated as a proper email above
+      subject: `📋 New Enrollment Enquiry — ${safeChildName} (${safeCourse})`,
       html: htmlBody,
     });
 
     // Send a confirmation email to the parent
     await transporter.sendMail({
       from: `"The Almost Adults Academy" <${process.env.GMAIL_USER}>`,
-      to: parentEmail,
+      to: String(parentEmail),
       subject: "We received your enrollment enquiry! 🎉",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #ff6b35, #ffd166); padding: 28px 32px; border-radius: 12px 12px 0 0;">
-            <h1 style="color: #fff; margin: 0; font-size: 22px;">Thanks, ${parentName}! 🎉</h1>
+            <h1 style="color: #fff; margin: 0; font-size: 22px;">Thanks, ${safeName}! 🎉</h1>
           </div>
           <div style="padding: 32px; background: #fff; border-radius: 0 0 12px 12px; border: 1px solid #f3f4f6;">
             <p style="color: #374151; font-size: 15px; line-height: 1.6;">
-              Thank you for your interest in enrolling <strong>${childName}</strong> in our
-              <strong>${courseInterested}</strong> program at The Almost Adults Academy.
+              Thank you for your interest in enrolling <strong>${safeChildName}</strong> in our
+              <strong>${safeCourse}</strong> program at The Almost Adults Academy.
             </p>
             <p style="color: #374151; font-size: 15px; line-height: 1.6;">
               Our team will be in touch with you shortly to confirm details and next steps.

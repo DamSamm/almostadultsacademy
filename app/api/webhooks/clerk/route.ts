@@ -38,11 +38,15 @@ export async function POST(req: NextRequest) {
     const primaryEmailId = data.primary_email_address_id as string;
     const primaryEmail = emailAddresses.find((e) => e.id === primaryEmailId)?.email_address ?? "";
 
-    await supabaseAdmin.from("profiles").insert({
+    const { error } = await supabaseAdmin.from("profiles").insert({
       clerk_user_id: data.id as string,
       name: [data.first_name, data.last_name].filter(Boolean).join(" ") || null,
       email: primaryEmail,
     });
+    if (error) {
+      console.error("Failed to create profile for user:", data.id, error);
+      return NextResponse.json({ error: "DB insert failed" }, { status: 500 });
+    }
   }
 
   if (type === "user.updated") {
@@ -50,20 +54,28 @@ export async function POST(req: NextRequest) {
     const primaryEmailId = data.primary_email_address_id as string;
     const primaryEmail = emailAddresses.find((e) => e.id === primaryEmailId)?.email_address ?? "";
 
-    await supabaseAdmin
+    const { error } = await supabaseAdmin
       .from("profiles")
       .update({
         name: [data.first_name, data.last_name].filter(Boolean).join(" ") || null,
         email: primaryEmail,
       })
       .eq("clerk_user_id", data.id as string);
+    if (error) {
+      console.error("Failed to update profile for user:", data.id, error);
+      return NextResponse.json({ error: "DB update failed" }, { status: 500 });
+    }
   }
 
   if (type === "user.deleted") {
-    await supabaseAdmin
+    const { error } = await supabaseAdmin
       .from("profiles")
       .delete()
       .eq("clerk_user_id", data.id as string);
+    if (error) {
+      console.error("Failed to delete profile for user:", data.id, error);
+      return NextResponse.json({ error: "DB delete failed" }, { status: 500 });
+    }
   }
 
   return NextResponse.json({ received: true });
