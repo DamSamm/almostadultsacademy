@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to save child" }, { status: 500 });
   }
 
-  // Block if a confirmed enrollment already exists for this child+course
+  // Block if an active recurring subscription already exists for this child+course
   const { data: confirmedEnrollment } = await supabaseAdmin
     .from("enrollments")
     .select("id")
@@ -56,11 +56,12 @@ export async function POST(req: NextRequest) {
     .eq("parent_id", profile.id)
     .eq("course", course)
     .eq("status", "confirmed")
+    .eq("billing_type", "recurring")
     .maybeSingle();
 
   if (confirmedEnrollment) {
     return NextResponse.json(
-      { error: "Your child is already enrolled in this course." },
+      { error: "Your child already has an active subscription for this course." },
       { status: 409 }
     );
   }
