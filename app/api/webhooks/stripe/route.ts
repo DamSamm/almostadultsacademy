@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import stripe from "@/lib/stripe";
 import supabaseAdmin from "@/lib/supabase-admin";
 import Stripe from "stripe";
+import logger from "@/lib/logger";
 
 /** Extracts the payment intent ID from an Invoice in Stripe v20+.
  * The field moved from `invoice.payment_intent` to `invoice.payments.data[0].payment.payment_intent`.
@@ -34,11 +35,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid webhook signature" }, { status: 400 });
   }
 
-  console.log(`Processing Stripe event: ${event.id} type: ${event.type}`);
+  logger.info({ eventId: event.id, eventType: event.type }, "Processing Stripe event");
 
   const eventAge = Math.floor(Date.now() / 1000) - event.created;
   if (eventAge > 300) {
-    console.warn(`Stale Stripe event received: ${event.id}, age: ${eventAge}s`);
+    logger.warn({ eventId: event.id, eventAge }, "Dropping stale Stripe event");
+    return NextResponse.json({ received: true, skipped: "stale" });
   }
 
   switch (event.type) {
@@ -49,7 +51,7 @@ export async function POST(req: NextRequest) {
       const billingType = session.metadata?.billing_type;
 
       if (!enrollmentId || !parentId) {
-        console.error(`checkout.session.completed missing metadata — session: ${session.id}`);
+        logger.error({ sessionId: session.id }, "checkout.session.completed missing metadata");
         break;
       }
 
@@ -90,7 +92,7 @@ export async function POST(req: NextRequest) {
         .eq("id", enrollmentId);
 
       if (enrollmentError) {
-        console.error("Failed to confirm enrollment:", enrollmentError);
+        logger.error({ err: enrollmentError }, "Failed to confirm enrollment");
         return NextResponse.json({ error: "DB update failed" }, { status: 500 });
       }
 
@@ -107,7 +109,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (paymentError) {
-        console.error("Failed to record payment:", paymentError);
+        logger.error({ err: paymentError }, "Failed to record payment");
         return NextResponse.json({ error: "DB insert failed" }, { status: 500 });
       }
       break;
@@ -125,7 +127,7 @@ export async function POST(req: NextRequest) {
         .eq("status", "pending"); // never cancel an already-confirmed enrollment
 
       if (expiredError) {
-        console.error("Failed to cancel expired enrollment:", expiredError);
+        logger.error({ err: expiredError }, "Failed to cancel expired enrollment");
         return NextResponse.json({ error: "DB update failed" }, { status: 500 });
       }
       break;
@@ -178,7 +180,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (recurringError) {
-        console.error("Failed to record recurring payment:", recurringError);
+        logger.error({ err: recurringError }, "Failed to record recurring payment");
         return NextResponse.json({ error: "DB insert failed" }, { status: 500 });
       }
       break;
@@ -229,7 +231,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (failedPaymentError) {
-        console.error("Failed to record failed payment:", failedPaymentError);
+        logger.error({ err: failedPaymentError }, "Failed to record failed payment");
         return NextResponse.json({ error: "DB insert failed" }, { status: 500 });
       }
       break;
@@ -253,7 +255,7 @@ export async function POST(req: NextRequest) {
         .eq("id", payment.enrollment_id);
 
       if (cancelError) {
-        console.error("Failed to cancel enrollment:", cancelError);
+        logger.error({ err: cancelError }, "Failed to cancel enrollment");
         return NextResponse.json({ error: "DB update failed" }, { status: 500 });
       }
 
@@ -266,13 +268,13 @@ export async function POST(req: NextRequest) {
 
       if (pendingCancelError) {
         // Non-critical — enrollment is already cancelled, but log for visibility
-        console.error("Failed to cancel pending payments:", pendingCancelError);
+        logger.error({ err: pendingCancelError }, "Failed to cancel pending payments");
       }
       break;
     }
 
     default:
-      console.log(`Unhandled Stripe event type: ${event.type}`);
+      logger.info({ eventType: event.type }, "Unhandled Stripe event type");
   }
 
   return NextResponse.json({ received: true });

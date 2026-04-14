@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Webhook } from "svix";
 import supabaseAdmin from "@/lib/supabase-admin";
+import logger from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
       email: primaryEmail,
     });
     if (error) {
-      console.error("Failed to create profile for user:", data.id, error);
+      logger.error({ userId: data.id, err: error }, "Failed to create profile");
       return NextResponse.json({ error: "DB insert failed" }, { status: 500 });
     }
   }
@@ -62,7 +63,7 @@ export async function POST(req: NextRequest) {
       })
       .eq("clerk_user_id", data.id as string);
     if (error) {
-      console.error("Failed to update profile for user:", data.id, error);
+      logger.error({ userId: data.id, err: error }, "Failed to update profile");
       return NextResponse.json({ error: "DB update failed" }, { status: 500 });
     }
   }
@@ -73,7 +74,7 @@ export async function POST(req: NextRequest) {
       .delete()
       .eq("clerk_user_id", data.id as string);
     if (error) {
-      console.error("Failed to delete profile for user:", data.id, error);
+      logger.error({ userId: data.id, err: error }, "Failed to delete profile");
       return NextResponse.json({ error: "DB delete failed" }, { status: 500 });
     }
   }

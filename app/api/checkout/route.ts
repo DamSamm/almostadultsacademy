@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import stripe from "@/lib/stripe";
 import supabaseAdmin from "@/lib/supabase-admin";
 import { checkoutRatelimit } from "@/lib/ratelimit";
+import logger from "@/lib/logger";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://almostadultsacademy.vercel.app";
 const PRICE_PER_SESSION_CENTS = 3500; // SGD $35.00
@@ -13,6 +14,11 @@ const ALLOWED_COURSES = [
   "STEM",
   "Performing Arts",
   "Outdoor Classes",
+];
+const ALLOWED_TIMES = [
+  "3:00 pm \u2013 4:00 pm",
+  "5:00 pm \u2013 6:00 pm",
+  "No preference",
 ];
 
 export async function POST(req: NextRequest) {
@@ -30,11 +36,32 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const body = await req.json();
-  const { childName, childAge, course, preferredTime, billingType } = body;
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  const { childName, childAge, course, preferredTime, billingType } = body as {
+    childName?: string;
+    childAge?: string;
+    course?: string;
+    preferredTime?: string;
+    billingType?: string;
+  };
 
   if (!childName || !childAge || !course || !billingType) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+  }
+
+  // Validate childName: max 100 chars, only letters, spaces, hyphens, apostrophes
+  const trimmedName = childName.trim();
+  if (trimmedName.length < 1 || trimmedName.length > 100) {
+    return NextResponse.json({ error: "Child name must be 1\u2013100 characters" }, { status: 400 });
+  }
+  if (!/^[a-zA-Z\s'\-]+$/.test(trimmedName)) {
+    return NextResponse.json({ error: "Child name contains invalid characters" }, { status: 400 });
   }
 
   if (!ALLOWED_COURSES.includes(course)) {
@@ -44,6 +71,10 @@ export async function POST(req: NextRequest) {
   const age = Number(childAge);
   if (!Number.isInteger(age) || age < 5 || age > 12) {
     return NextResponse.json({ error: "Child age must be between 5 and 12" }, { status: 400 });
+  }
+
+  if (preferredTime && !ALLOWED_TIMES.includes(preferredTime)) {
+    return NextResponse.json({ error: "Invalid time slot selection" }, { status: 400 });
   }
 
   if (!["one_time", "recurring"].includes(billingType)) {
@@ -65,7 +96,7 @@ export async function POST(req: NextRequest) {
   const { data: child, error: childError } = await supabaseAdmin
     .from("children")
     .upsert(
-      { parent_id: profile.id, name: childName, age: Number(childAge) },
+      { parent_id: profile.id, name: trimmedName, age },
       { onConflict: "parent_id,name" }
     )
     .select("id")
@@ -131,51 +162,60 @@ export async function POST(req: NextRequest) {
   const description = preferredTime ? `Preferred time: ${preferredTime}` : undefined;
 
   let session;
-  if (billingType === "one_time") {
-    session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      customer_email: profile.email ?? undefined,
-      line_items: [
-        {
-          price_data: {
-            currency: "sgd",
-            unit_amount: PRICE_PER_SESSION_CENTS,
-            product_data: { name: productName, description },
+  try {
+    if (billingType === "one_time") {
+      session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        customer_email: profile.email ?? undefined,
+        line_items: [
+          {
+            price_data: {
+              currency: "sgd",
+              unit_amount: PRICE_PER_SESSION_CENTS,
+              product_data: { name: productName, description },
+            },
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        metadata: {
+          enrollment_id: enrollmentId,
+          parent_id: profile.id,
+          billing_type: "one_time",
         },
-      ],
-      metadata: {
-        enrollment_id: enrollmentId,
-        parent_id: profile.id,
-        billing_type: "one_time",
-      },
-      success_url: `${SITE_URL}/dashboard?payment=success`,
-      cancel_url: `${SITE_URL}/enroll?payment=cancelled`,
-    });
-  } else {
-    session = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      customer_email: profile.email ?? undefined,
-      line_items: [
-        {
-          price_data: {
-            currency: "sgd",
-            unit_amount: PRICE_PER_SESSION_CENTS,
-            recurring: { interval: "month" },
-            product_data: { name: productName, description },
+        success_url: `${SITE_URL}/dashboard?payment=success`,
+        cancel_url: `${SITE_URL}/enroll?payment=cancelled`,
+      });
+    } else {
+      session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        customer_email: profile.email ?? undefined,
+        line_items: [
+          {
+            price_data: {
+              currency: "sgd",
+              unit_amount: PRICE_PER_SESSION_CENTS,
+              recurring: { interval: "month" },
+              product_data: { name: productName, description },
+            },
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        metadata: {
+          enrollment_id: enrollmentId,
+          parent_id: profile.id,
+          billing_type: "recurring",
         },
-      ],
-      metadata: {
-        enrollment_id: enrollmentId,
-        parent_id: profile.id,
-        billing_type: "recurring",
-      },
-      success_url: `${SITE_URL}/dashboard?payment=success`,
-      cancel_url: `${SITE_URL}/enroll?payment=cancelled`,
-    });
+        success_url: `${SITE_URL}/dashboard?payment=success`,
+        cancel_url: `${SITE_URL}/enroll?payment=cancelled`,
+      });
+    }
+  } catch (err) {
+    logger.error({ err }, "Stripe checkout session creation failed");
+    return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
+  }
+
+  if (!session.url) {
+    return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
   }
 
   return NextResponse.json({ url: session.url });

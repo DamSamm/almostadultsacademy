@@ -31,6 +31,23 @@ const nextConfig: NextConfig = {
             key: "X-DNS-Prefetch-Control",
             value: "on",
           },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.clerk.accounts.dev",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://img.clerk.com",
+              "font-src 'self'",
+              "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.clerk.accounts.dev",
+              "frame-src 'self' https://*.clerk.accounts.dev",
+              "frame-ancestors 'none'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "upgrade-insecure-requests",
+            ].join("; "),
+          },
         ],
       },
     ];
