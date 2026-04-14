@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import FadeIn from "../components/FadeIn";
+
+export const metadata: Metadata = {
+  title: "Gallery",
+  description:
+    "See photos and highlights from The Almost Adults Academy — hands-on learning, creative projects, STEM experiments and outdoor adventures.",
+  openGraph: {
+    title: "Gallery | The Almost Adults Academy",
+    description:
+      "See photos and highlights from The Almost Adults Academy — hands-on learning, creative projects, STEM experiments and outdoor adventures.",
+  },
+};
 
 const photos = [
   {

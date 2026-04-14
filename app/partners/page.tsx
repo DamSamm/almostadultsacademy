@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Partners & Competitors",
+  description:
+    "Learn about The Almost Adults Academy's partnerships with Mandai Wildlife Reserve, Science Centre Singapore and Focus Adventure, and how we compare to other enrichment centres in Singapore.",
+  openGraph: {
+    title: "Partners & Competitors | The Almost Adults Academy",
+    description:
+      "Our partnerships with Mandai Wildlife Reserve, Science Centre Singapore and Focus Adventure, and how we stand out in Singapore's enrichment landscape.",
+  },
+};
 
 const partners = [
   {

@@ -12,6 +12,15 @@ const programSlugs = [
   "outdoor-classes",
 ];
 
+const blogSlugs = [
+  "life-skills-every-child-should-learn",
+  "coding-new-literacy-for-kids",
+  "outdoor-education-builds-resilience",
+  "inside-creative-arts-classes",
+  "stem-curiosity-foundation",
+  "performing-arts-confidence",
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`, priority: 1.0, changeFrequency: "weekly" },
@@ -32,5 +41,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly",
   }));
 
-  return [...staticRoutes, ...programRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
+    url: `${BASE_URL}/blog/${slug}`,
+    priority: 0.7,
+    changeFrequency: "monthly",
+  }));
+
+  return [...staticRoutes, ...programRoutes, ...blogRoutes];
 }

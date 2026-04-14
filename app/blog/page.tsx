@@ -1,5 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import FadeIn from "../components/FadeIn";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description:
+    "Tips, insights and stories about children's enrichment education — from coding and STEM to life skills, creative arts and outdoor learning.",
+  openGraph: {
+    title: "Blog | The Almost Adults Academy",
+    description:
+      "Tips, insights and stories about children's enrichment education — from coding and STEM to life skills, creative arts and outdoor learning.",
+  },
+};
 
 const posts = [
   {

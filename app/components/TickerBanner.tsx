@@ -3,7 +3,7 @@ const items = [
   "✨ Enroll Now for 2026!",
   "🎓 6 Enrichment Programs for Ages 5–12",
   "🌟 100+ 5-Star Reviews from Parents",
-  "📍 Centres at Bukit Timah · Clementi · Tampines",
+  "📍 Centres at City Hall · Punggol · Tampines · Jurong East",
   "🎉 Free Trial Class Available",
 ];
 

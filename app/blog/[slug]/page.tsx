@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -283,6 +284,25 @@ export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = posts.find((p) => p.slug === slug);
+  if (!post) return {};
+  return {
+    title: post.title,
+    description: post.intro.slice(0, 160),
+    openGraph: {
+      title: `${post.title} | The Almost Adults Academy`,
+      description: post.intro.slice(0, 160),
+      images: [{ url: post.image, width: 1200, height: 630, alt: post.title }],
+    },
+  };
+}
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -292,8 +312,29 @@ export default async function BlogPostPage({
   const post = posts.find((p) => p.slug === slug);
   if (!post) notFound();
 
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    image: post.image,
+    datePublished: post.date,
+    author: {
+      "@type": "Organization",
+      name: "The Almost Adults Academy",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "The Almost Adults Academy",
+    },
+    description: post.intro.slice(0, 160),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
       {/* ── HERO ── */}
       <section className="relative" style={{ minHeight: "420px" }}>
         <div className="relative w-full" style={{ height: "420px" }}>

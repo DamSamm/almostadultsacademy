@@ -56,8 +56,50 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "The Almost Adults Academy",
+    url: BASE_URL,
+    logo: `${BASE_URL}/og-image.png`,
+    description:
+      "An after-school enrichment centre for children aged 5–12 in Singapore offering Coding, Life Skills, Creative Arts, STEM, Performing Arts and Outdoor Classes.",
+    foundingDate: "2015",
+    numberOfEmployees: { "@type": "QuantitativeValue", value: 105 },
+    slogan: "Small Humans, Big Plans",
+    areaServed: { "@type": "Country", name: "Singapore" },
+    address: [
+      {
+        "@type": "PostalAddress",
+        addressLocality: "City Hall",
+        addressCountry: "SG",
+      },
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Punggol",
+        addressCountry: "SG",
+      },
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Tampines",
+        addressCountry: "SG",
+      },
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Jurong East",
+        addressCountry: "SG",
+      },
+    ],
+  };
+
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

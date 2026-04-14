@@ -6,6 +6,14 @@ import { checkoutRatelimit } from "@/lib/ratelimit";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://almostadultsacademy.vercel.app";
 const PRICE_PER_SESSION_CENTS = 3500; // SGD $35.00
+const ALLOWED_COURSES = [
+  "Coding",
+  "Essential Life Skills",
+  "Creative Arts",
+  "STEM",
+  "Performing Arts",
+  "Outdoor Classes",
+];
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
@@ -27,6 +35,15 @@ export async function POST(req: NextRequest) {
 
   if (!childName || !childAge || !course || !billingType) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+  }
+
+  if (!ALLOWED_COURSES.includes(course)) {
+    return NextResponse.json({ error: "Invalid course selection" }, { status: 400 });
+  }
+
+  const age = Number(childAge);
+  if (!Number.isInteger(age) || age < 5 || age > 12) {
+    return NextResponse.json({ error: "Child age must be between 5 and 12" }, { status: 400 });
   }
 
   if (!["one_time", "recurring"].includes(billingType)) {

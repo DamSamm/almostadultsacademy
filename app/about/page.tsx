@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Meet the team behind The Almost Adults Academy — Singapore's award-winning after-school enrichment centre for children aged 5–12. Learn about our mission, departments, and values.",
+  openGraph: {
+    title: "About Us | The Almost Adults Academy",
+    description:
+      "Meet the team behind The Almost Adults Academy — Singapore's award-winning after-school enrichment centre for children aged 5–12.",
+  },
+};
 
 const teamMembers = [
   {

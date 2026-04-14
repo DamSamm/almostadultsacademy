@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -217,6 +218,27 @@ export async function generateStaticParams() {
   return programs.map((p) => ({ slug: p.slug }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const program = programs.find((p) => p.slug === slug);
+  if (!program) return {};
+  return {
+    title: `${program.title} Programme`,
+    description: program.intro.slice(0, 160),
+    openGraph: {
+      title: `${program.title} Programme | The Almost Adults Academy`,
+      description: program.intro.slice(0, 160),
+      images: program.image
+        ? [{ url: program.image, width: 1200, height: 630, alt: `${program.title} class` }]
+        : undefined,
+    },
+  };
+}
+
 export default async function ProgramDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const program = programs.find((p) => p.slug === slug);
@@ -224,8 +246,30 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
 
   const accentColor = program.color === "#ffd166" ? "#cc8800" : program.color;
 
+  const courseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: program.title,
+    description: program.intro,
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "The Almost Adults Academy",
+      sameAs: process.env.NEXT_PUBLIC_SITE_URL || "https://almostadultsacademy.vercel.app",
+    },
+    offers: {
+      "@type": "Offer",
+      price: "35.00",
+      priceCurrency: "SGD",
+      availability: "https://schema.org/InStock",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
       {/* ── HERO ── */}
       <section className="py-24 text-center" style={{ background: program.hero }}>
         <div className="max-w-4xl mx-auto px-4">

@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Promotions & Marketing",
+  description:
+    "Current promotions, marketing strategies and upcoming initiatives at The Almost Adults Academy — including sibling discounts, seasonal offers and community events.",
+  openGraph: {
+    title: "Promotions & Marketing | The Almost Adults Academy",
+    description:
+      "Current promotions, marketing strategies and upcoming initiatives at The Almost Adults Academy.",
+  },
+};
 
 const strategies = [
   {

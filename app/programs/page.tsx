@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Programmes",
+  description:
+    "Explore 6 enrichment programmes for children aged 5–12: Coding, Essential Life Skills, Creative Arts, STEM, Performing Arts and Outdoor Classes. SGD $35 per session.",
+  openGraph: {
+    title: "Programmes | The Almost Adults Academy",
+    description:
+      "Explore 6 enrichment programmes for children aged 5–12: Coding, Essential Life Skills, Creative Arts, STEM, Performing Arts and Outdoor Classes.",
+  },
+};
 
 const programs = [
   {
